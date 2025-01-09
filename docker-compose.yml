@@ -1,7 +1,7 @@
 x-common-variables: &common-variables
   MYSQL_USER: sampleuser
   MYSQL_PASSWORD: samplepassword
-  MYSQL_DATABASE: sampledb
+  MYSQL_DATABASE: tasker_db
   MYSQL_HOST: localhost
 
 services:
@@ -14,21 +14,31 @@ services:
     ports:
       - 3306:3306
     restart: unless-stopped
-    # volumes:
-    #   - ./db/sample.sql:/docker-entrypoint-initdb.d/sample.sql
-  # tasker_server:
-  #   build: ./tasker_server
-  #   ports:
-  #     - "8000:8000"
-  #   restart: on-failure
-  #   volumes:
-  #     - .:/app
-  #   links:
-  #     - mysql
-  #   environment:
-  #     <<: *common-variables
-  #     PORT: :8000
-  #     DB_DRIVER: mysql
+    volumes:
+      # - ./db/tasker_db.sql:/docker-entrypoint-initdb.d/tasker_db.sql
+      - ./db/tasker_backup.sql:/docker-entrypoint-initdb.d/tasker_backup.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 3s
+      retries: 10
+  tasker_server:
+    container_name: tasker_server
+    build: ./tasker_server
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    volumes:
+      - .:/app
+    links:
+      - tasker_db
+    depends_on:
+      tasker_db:
+        condition: service_healthy
+    environment:
+      <<: *common-variables
+      PORT: :8000
+      DB_DRIVER: mysql
   # tasker_client:
   #   build: ./tasker_client
   #   environment:
