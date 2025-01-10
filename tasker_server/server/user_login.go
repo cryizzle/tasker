@@ -3,16 +3,13 @@ package server
 import (
 	"database/sql"
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserLoginRequest struct {
 	Email string `json:"email"`
-}
-
-type UserIDRequest struct {
-	UserID uint64 `json:"user_id"`
 }
 
 func (srv Server) UserLogin(c *gin.Context) {
@@ -26,6 +23,7 @@ func (srv Server) UserLogin(c *gin.Context) {
 	user, err := srv.DB.GetUserByEmail(ctx, request.Email)
 
 	if err == nil && user != nil {
+		setActiveUserID(c, user.ID)
 		c.JSON(200, gin.H{"user": user})
 		return
 	}
@@ -50,6 +48,12 @@ func (srv Server) UserLogin(c *gin.Context) {
 		return
 	}
 
+	setActiveUserID(c, userID)
 	c.JSON(200, gin.H{"user": user})
 
+}
+
+func setActiveUserID(c *gin.Context, userID uint64) {
+	c.SetCookie(KEY_USER_ID, strconv.FormatUint(userID, 10), 0, "/", "localhost", false, true)
+	log.Println("Cookie=", c.Request.Cookies())
 }

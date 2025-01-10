@@ -1,50 +1,50 @@
 package server
 
 import (
-	"strconv"
+	"log"
 
 	"github.com/cryizzle/tasker/tasker_server/server/database"
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid"
 )
-
-type JoinTodoListRequest struct {
-	UserIDRequest
-}
 
 func (srv Server) JoinTodoList(c *gin.Context) {
 
-	var request JoinTodoListRequest
-	pathParam := c.Param("todo_list_id")
-	todoListID, err := strconv.ParseUint(pathParam, 10, 64)
+	pathParam := c.Param("todo_list_token")
+	todoListToken := uuid.FromStringOrNil(pathParam)
 
+	userID, err := GetAuthenticatedUser(c)
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Invalid todo list ID"})
+		c.JSON(400, err)
 		return
 	}
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(400, gin.H{"error": "Invalid request"})
-		return
-	}
-
-	user, err := srv.DB.GetUserByID(c.Request.Context(), request.UserID)
-
+	user, err := srv.DB.GetUserByID(c.Request.Context(), userID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Error getting user by ID"})
 		return
 	}
 
-	if user.IsMember(todoListID) {
+	todoList, err := srv.DB.GetTodoList(c.Request.Context(), &database.TodoListQueryParam{
+		TodoListToken: todoListToken,
+	})
+	if err != nil {
+		log.Println(err)
+		c.JSON(500, gin.H{"error": "Error getting todo list by token"})
+		return
+	}
+
+	if user.IsMember(todoList.ID) {
 		c.JSON(200, gin.H{"message": "User is already a member of this todo list"})
 		return
 	}
 
-	err = srv.DB.JoinTodoList(c.Request.Context(), todoListID, user.ID)
+	err = srv.DB.JoinTodoList(c.Request.Context(), todoList.ID, user.ID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Error joining todo list"})
 		return
 	}
 
-	c.JSON(200, gin.H{"todo_list": database.TodoList{ID: todoListID}})
+	c.JSON(200, gin.H{"todo_list": todoList})
 
 }

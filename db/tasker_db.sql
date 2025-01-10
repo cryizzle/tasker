@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `todo_lists` (
   `todo_list_id` INT NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`todo_list_id`)
+  `token` BINARY(16) NOT NULL,
+  PRIMARY KEY (`todo_list_id`),
+  UNIQUE KEY `token` (`token`)
 ) Engine=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `members`(

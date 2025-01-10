@@ -6,7 +6,6 @@ import (
 )
 
 type CreateTodoRequest struct {
-	UserIDRequest
 	Description string `json:"description"`
 	TodoListID  uint64 `json:"todo_list_id"`
 }
@@ -19,7 +18,13 @@ func (srv Server) CreateTodo(c *gin.Context) {
 		return
 	}
 
-	user, err := srv.DB.GetUserByID(c.Request.Context(), request.UserID)
+	userID, err := GetAuthenticatedUser(c)
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+
+	user, err := srv.DB.GetUserByID(c.Request.Context(), userID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Error getting user by ID"})
 		return

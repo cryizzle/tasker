@@ -6,6 +6,9 @@ require (
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-sql-driver/mysql v1.8.1
+	github.com/gofrs/uuid v4.4.0+incompatible
+	github.com/jmoiron/sqlx v1.4.0
+	github.com/judedaryl/go-arrayutils v0.0.1
 )
 
 require (
@@ -20,10 +23,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.23.0 // indirect
 	github.com/goccy/go-json v0.10.4 // indirect
-	github.com/google/uuid v1.6.0 // indirect
-	github.com/jmoiron/sqlx v1.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/judedaryl/go-arrayutils v0.0.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect

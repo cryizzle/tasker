@@ -2,23 +2,30 @@ package database
 
 import (
 	"context"
+	"errors"
+	"log"
+	"strings"
 
+	"github.com/gofrs/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
 type TodoList struct {
-	ID      uint64   `json:"id" db:"todo_list_id"`
-	Name    string   `json:"name" db:"name"`
-	Members []Member `json:"members"`
-	Todos   []Todo   `json:"todos"`
+	ID      uint64    `json:"id" db:"todo_list_id"`
+	Token   uuid.UUID `json:"token" db:"token"`
+	Name    string    `json:"name" db:"name"`
+	Members []Member  `json:"members"`
+	Todos   []Todo    `json:"todos"`
 }
 
-func (db Database) CreateTodoList(ctx context.Context, name string, user *User) (uint64, error) {
+func (db Database) CreateTodoList(ctx context.Context, name string, token uuid.UUID, user *User) (uint64, error) {
 
-	return WithTransactionRet[uint64](db.db, ctx, nil, func(ctx context.Context, tx *sqlx.Tx) (uint64, error) {
+	return WithTransactionRet(db.db, ctx, nil, func(ctx context.Context, tx *sqlx.Tx) (uint64, error) {
 
-		query := `INSERT INTO todo_lists (name) VALUES (?)`
-		result, err := tx.ExecContext(ctx, query, name)
+		log.Println(token)
+
+		query := `INSERT INTO todo_lists (name, token) VALUES (?, ?)`
+		result, err := tx.ExecContext(ctx, query, name, token.Bytes())
 
 		if err != nil {
 			return 0, err
@@ -42,24 +49,49 @@ func (db Database) CreateTodoList(ctx context.Context, name string, user *User) 
 
 }
 
-func (db Database) GetTodoList(ctx context.Context, todoListID uint64) (*TodoList, error) {
-	var todoList TodoList
-	query := `SELECT * FROM todo_lists WHERE todo_list_id = ?`
+type TodoListQueryParam struct {
+	TodoListID    uint64
+	TodoListToken uuid.UUID
+}
 
-	err := db.db.GetContext(ctx, &todoList, query, todoListID)
+func (db Database) GetTodoList(ctx context.Context, query *TodoListQueryParam) (*TodoList, error) {
+	var todoList TodoList
+	var queryParam []string
+	var args []any
+
+	if query == nil {
+		return nil, errors.New("no query parameters provided")
+	}
+
+	if query.TodoListID != 0 {
+		queryParam = append(queryParam, "todo_list_id = ?")
+		args = append(args, query.TodoListID)
+	}
+
+	if query.TodoListToken != uuid.Nil {
+		queryParam = append(queryParam, "token = ?")
+		args = append(args, query.TodoListToken.Bytes())
+	}
+
+	if len(queryParam) == 0 || len(args) == 0 {
+		return nil, errors.New("no query parameters provided")
+	}
+
+	queryString := `SELECT * FROM todo_lists WHERE ` + strings.Join(queryParam, " AND ")
+	err := db.db.GetContext(ctx, &todoList, queryString, args...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	members, err := db.GetMembers(ctx, todoListID)
+	members, err := db.GetTodoListMembers(ctx, todoList.ID)
 
 	if err != nil {
 		return nil, err
 	}
 	todoList.Members = members
 
-	todos, err := db.GetTodos(ctx, todoListID)
+	todos, err := db.GetTodos(ctx, todoList.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +104,8 @@ func (db Database) ListTodoLists(ctx context.Context, userID uint64) ([]TodoList
 	var todoLists []TodoList
 	query := `SELECT
 	tdl.todo_list_id as todo_list_id,
-	tdl.name as name
+	tdl.name as name,
+	tdl.token as token
 	FROM todo_lists tdl
 	JOIN members ON tdl.todo_list_id = members.todo_list_id
 	WHERE members.user_id = ?`

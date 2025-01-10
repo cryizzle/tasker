@@ -10,7 +10,6 @@ import (
 
 type UpdateTodoRequest struct {
 	Status database.TodoStatus `json:"status"`
-	UserIDRequest
 }
 
 func (srv Server) UpdateTodo(c *gin.Context) {
@@ -22,12 +21,18 @@ func (srv Server) UpdateTodo(c *gin.Context) {
 		return
 	}
 
+	userID, err := GetAuthenticatedUser(c)
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+
 	var request UpdateTodoRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid request"})
 	}
 
-	user, err := srv.DB.GetUserByID(c.Request.Context(), request.UserID)
+	user, err := srv.DB.GetUserByID(c.Request.Context(), userID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Error getting user by ID"})
 		return

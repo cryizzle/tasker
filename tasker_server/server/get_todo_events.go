@@ -6,10 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GetTodoEventsRequest struct {
-	UserIDRequest
-}
-
 func (srv Server) GetTodoEvents(c *gin.Context) {
 
 	param := c.Param("todo_id")
@@ -20,13 +16,13 @@ func (srv Server) GetTodoEvents(c *gin.Context) {
 		return
 	}
 
-	var request GetTodoEventsRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(400, gin.H{"error": "Invalid request"})
+	userID, err := GetAuthenticatedUser(c)
+	if err != nil {
+		c.JSON(400, err)
 		return
 	}
 
-	user, err := srv.DB.GetUserByID(c.Request.Context(), request.UserID)
+	user, err := srv.DB.GetUserByID(c.Request.Context(), userID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Error getting user by ID"})
 		return

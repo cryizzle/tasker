@@ -1,20 +1,22 @@
 package server
 
-import "github.com/gin-gonic/gin"
+import (
+	"log"
 
-type ListTodoListsRequest struct {
-	UserIDRequest
-}
+	"github.com/gin-gonic/gin"
+)
 
 func (srv Server) ListTodoLists(c *gin.Context) {
-	var request ListTodoListsRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(400, gin.H{"error": "Invalid request"})
+
+	userID, err := GetAuthenticatedUser(c)
+	if err != nil {
+		c.JSON(400, err)
 		return
 	}
 
-	todoLists, err := srv.DB.ListTodoLists(c.Request.Context(), request.UserID)
+	todoLists, err := srv.DB.ListTodoLists(c.Request.Context(), userID)
 	if err != nil {
+		log.Println(err)
 		c.JSON(500, gin.H{"error": "Error listing todo lists"})
 		return
 	}
