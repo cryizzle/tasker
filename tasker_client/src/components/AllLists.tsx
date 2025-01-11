@@ -37,9 +37,9 @@ const AllLists: React.FC = () => {
       maxWidth="md"
     >
       <JoinList handleJoinList={handleJoinList} />
-      <Typography variant="h2" gutterBottom textAlign="center">
-        My Lists
-      </Typography>
+      <Box sx={{ m: 3, textAlign: 'center' }}>
+        <h2>My Lists</h2>
+      </Box>
       <List component={Box} bgcolor={'transparent'}>
         {todoLists.map((list) => (
           <SingleList list={list} />
@@ -72,7 +72,7 @@ const SingleList: React.FC<{
   };
 
   return <ListItem key={list.id} component={Paper} elevation={2} sx={{ mb: 2, p: 2 }}>
-    <Box sx={{ flexGrow: 1, cursor:"pointer" }} onClick={() => handleListClick(list.id)}>
+    <Box sx={{ flexGrow: 1, cursor: "pointer" }} onClick={() => handleListClick(list.id)}>
       <Typography variant="h6" gutterBottom>
         {list.name}
       </Typography>

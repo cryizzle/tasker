@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
       <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
         Tasker
       </Typography>
-      <Button color="inherit" onClick={handleLogout}>
+      <Button color="inherit" onClick={handleLogout} size='medium'>
         Logout
       </Button>
     </Toolbar>
