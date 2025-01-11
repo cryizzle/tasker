@@ -80,7 +80,9 @@ const TodoList: React.FC = () => {
           </TableHead>
           <TableBody>
             {activeList.todos?.map((todo) => (
-              <TodoItem todo={todo}
+              <TodoItem
+                key={todo.id}
+                todo={todo}
                 handleStatusChange={handleStatusChange}
                 isOpen={openRowTodoID === todo.id}
                 handleRowOpen={() => handleRowClick(todo.id)}
@@ -102,7 +104,7 @@ const TodoItem: React.FC<{
 }> = ({ todo, handleStatusChange, handleRowOpen, isOpen }) => {
 
   return <>
-    <TableRow key={todo.id}>
+    <TableRow>
       <TableCell>{todo.description}</TableCell>
       <TableCell>
         <Tooltip title={moment(todo.updated_at).toLocaleString()} placement='top'>

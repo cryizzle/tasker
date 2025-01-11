@@ -42,7 +42,7 @@ const AllLists: React.FC = () => {
       </Box>
       <List component={Box} bgcolor={'transparent'}>
         {todoLists.map((list) => (
-          <SingleList list={list} />
+          <SingleList list={list} key={list.id} />
         ))}
         <NewList handleCreateList={handleCreateList} />
       </List>
@@ -71,7 +71,7 @@ const SingleList: React.FC<{
     }
   };
 
-  return <ListItem key={list.id} component={Paper} elevation={2} sx={{ mb: 2, p: 2 }}>
+  return <ListItem component={Paper} elevation={2} sx={{ mb: 2, p: 2 }}>
     <Box sx={{ flexGrow: 1, cursor: "pointer" }} onClick={() => handleListClick(list.id)}>
       <Typography variant="h6" gutterBottom>
         {list.name}
