@@ -18,6 +18,11 @@ func (srv Server) CreateTodo(c *gin.Context) {
 		return
 	}
 
+	if request.Description == "" {
+		c.JSON(400, gin.H{"error": "Description is required"})
+		return
+	}
+
 	userID, err := GetAuthenticatedUser(c)
 	if err != nil {
 		c.JSON(400, err)
@@ -36,11 +41,10 @@ func (srv Server) CreateTodo(c *gin.Context) {
 	}
 
 	todoID, err := srv.DB.CreateTodo(c.Request.Context(), &database.Todo{
-		Description:   request.Description,
-		TodoListID:    request.TodoListID,
-		Status:        database.TODO,
-		CreatedByUser: user,
-		CreatedBy:     user.ID,
+		Description: request.Description,
+		TodoListID:  request.TodoListID,
+		Status:      database.TODO,
+		CreatedBy:   user.ID,
 	})
 
 	if err != nil {

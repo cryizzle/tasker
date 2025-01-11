@@ -17,14 +17,14 @@ const (
 )
 
 type Todo struct {
-	ID            uint64     `json:"id" db:"todo_id"`
-	TodoListID    uint64     `json:"todo_list_id" db:"todo_list_id"`
-	Description   string     `json:"description" db:"description"`
-	Status        TodoStatus `json:"status" db:"status"`
-	CreatedAt     time.Time  `json:"created_at" db:"created_at"`
-	UpdatedAt     time.Time  `json:"updated_at" db:"updated_at"`
-	CreatedBy     uint64     `json:"-" db:"created_by"`
-	CreatedByUser *User      `json:"created_by"`
+	ID          uint64     `json:"id" db:"todo_id"`
+	TodoListID  uint64     `json:"todo_list_id" db:"todo_list_id"`
+	Description string     `json:"description" db:"description"`
+	Status      TodoStatus `json:"status" db:"status"`
+	CreatedAt   time.Time  `json:"created_at" db:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at" db:"updated_at"`
+	CreatedBy   uint64     `json:"created_by" db:"created_by"`
+	User
 }
 
 func (t Todo) VerifyNextStatus(nextStatus TodoStatus) bool {
@@ -47,7 +47,18 @@ func (t Todo) GetPossibleNextStatus() []TodoStatus {
 
 func (db Database) GetTodos(ctx context.Context, todoListID uint64) ([]Todo, error) {
 	var todos []Todo
-	query := `SELECT * FROM todos WHERE todo_list_id = ?`
+	query := `SELECT todos.todo_id as todo_id,
+	todos.todo_list_id as todo_list_id,
+	todos.description as description,
+	todos.status as status,
+	todos.created_at as created_at,
+	todos.updated_at as updated_at,
+	todos.created_by as created_by,
+	users.user_id as user_id,
+	users.email as email
+	FROM todos
+	JOIN users ON todos.created_by = users.user_id
+	WHERE todo_list_id = ?`
 
 	err := db.db.SelectContext(ctx, &todos, query, todoListID)
 	return todos, err

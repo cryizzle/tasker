@@ -32,6 +32,11 @@ func (srv Server) UpdateTodo(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "Invalid request"})
 	}
 
+	if request.Status == "" {
+		c.JSON(400, gin.H{"error": "Status is required"})
+		return
+	}
+
 	user, err := srv.DB.GetUserByID(c.Request.Context(), userID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Error getting user by ID"})

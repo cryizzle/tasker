@@ -19,6 +19,11 @@ func (srv Server) CreateTodoList(c *gin.Context) {
 		return
 	}
 
+	if request.Name == "" {
+		c.JSON(400, gin.H{"error": "Name is required"})
+		return
+	}
+
 	userID, err := GetAuthenticatedUser(c)
 	if err != nil {
 		c.JSON(400, err)

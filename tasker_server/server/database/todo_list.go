@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"errors"
-	"log"
 	"strings"
 
 	"github.com/gofrs/uuid"
@@ -21,8 +20,6 @@ type TodoList struct {
 func (db Database) CreateTodoList(ctx context.Context, name string, token uuid.UUID, user *User) (uint64, error) {
 
 	return WithTransactionRet(db.db, ctx, nil, func(ctx context.Context, tx *sqlx.Tx) (uint64, error) {
-
-		log.Println(token)
 
 		query := `INSERT INTO todo_lists (name, token) VALUES (?, ?)`
 		result, err := tx.ExecContext(ctx, query, name, token.Bytes())
