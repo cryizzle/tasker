@@ -35,7 +35,7 @@ func (srv Server) JoinTodoList(c *gin.Context) {
 	}
 
 	if user.IsMember(todoList.ID) {
-		c.JSON(200, gin.H{"message": "User is already a member of this todo list"})
+		c.JSON(500, gin.H{"error": "User is already a member of this todo list"})
 		return
 	}
 
