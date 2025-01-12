@@ -24,15 +24,11 @@ Before setting up the project locally, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository_url>
+git clone https://github.com/cryizzle/tasker.git
 cd tasker
 ```
 
-### 2. Set Up Environment Variables
-
-Create a `.env` file in the project root directory and configure it with appropriate settings for your environment.
-
-### 3. Start the Backend Server
+### 2. Start the Backend Server
 
 To build and run the backend services using Docker:
 
@@ -52,7 +48,7 @@ To restart the server after making changes to the backend code:
 make server_restart
 ```
 
-### 4. Run Backend Tests
+### 3. Run Backend Tests
 
 Execute the following command to run backend unit tests:
 
@@ -60,7 +56,7 @@ Execute the following command to run backend unit tests:
 make server_test
 ```
 
-### 5. Connect to the Database
+### 4. Connect to the Database
 
 To access the MySQL database locally for reading and querying:
 
@@ -68,7 +64,7 @@ To access the MySQL database locally for reading and querying:
 make db_connect
 ```
 
-### 6. Start the Frontend Client
+### 5. Start the Frontend Client
 
 Ensure you have nvm installed and the appropriate Node.js version set:
 
