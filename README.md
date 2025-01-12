@@ -15,7 +15,7 @@ Before setting up the project locally, ensure you have the following installed:
 - Docker
 - [Node.js and nvm](https://github.com/nvm-sh/nvm)
 - [Go](https://golang.org/doc/install)
-- [MySQL Client](https://dev.mysql.com/downloads/)
+- MySQL
 
 ## Setup Guide
 
@@ -32,6 +32,13 @@ To build and run the backend services using Docker:
 
 ```bash
 make server_start
+```
+
+Note: By default, the database is started with a dump which has some data already populated. To start with empty tables, change the following volumes in `docker_compose.yml`:
+```
+    volumes:
+      - ./db/tasker_db.sql:/docker-entrypoint-initdb.d/tasker_db.sql  # Uncomment this for fresh DB with no data
+      # - ./db/tasker_backup.sql:/docker-entrypoint-initdb.d/tasker_backup.sql
 ```
 
 To view live logs of the server:
