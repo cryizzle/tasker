@@ -77,7 +77,7 @@ func (srv *Server) Routes() {
 		listGroup.GET("/all", srv.ListTodoLists)
 		listGroup.GET("/:todo_list_id", srv.GetTodoList)
 		// SSE
-		listGroup.GET("/:todo_list_id/update", SSEHeadersMiddleware(), srv.manageClientChannel(), srv.UpdateTodoList)
+		listGroup.GET("/updates/:todo_list_id", SSEHeadersMiddleware(), srv.manageClientChannel(), srv.TodoListUpdates)
 	}
 
 	todoGroup := srv.Router.Group("/todo", AuthUser())

@@ -12,7 +12,7 @@ const TodoListUpdater: React.FC<{
     if (!todoListID) {
       return;
     }
-    const eventSource = new EventSource(`http://localhost:8000/list/${todoListID}/update`, {
+    const eventSource = new EventSource(`http://localhost:8000/list/updates/${todoListID}`, {
       withCredentials: true,
     });
     eventSource.onmessage = (_) => {

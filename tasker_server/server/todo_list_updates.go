@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (srv Server) UpdateTodoList(c *gin.Context) {
+func (srv Server) TodoListUpdates(c *gin.Context) {
 	todoListID := c.Param("todo_list_id")
 
 	v, ok := c.Get("clientChan")
