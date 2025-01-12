@@ -9,6 +9,9 @@ server_log:
 server_restart:
 	docker compose build tasker_server && docker compose up -d tasker_server
 
+server_test:
+	go test -v ./...
+
 db_connect:
 	mysql -h localhost -P 3306 --protocol=tcp -u root -p
 

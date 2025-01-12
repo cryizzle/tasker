@@ -32,7 +32,7 @@ type ClientChan chan string
 
 type Server struct {
 	Router *gin.Engine
-	DB     *database.Database
+	DB     database.DatabaseImpl
 	Event  *Event
 }
 
@@ -59,7 +59,7 @@ func (srv *Server) Routes() {
 
 	corsConfig := cors.DefaultConfig()
 	// TODO: move to env
-	corsConfig.AllowOrigins = []string{"http://localhost:5173"}
+	corsConfig.AllowOrigins = []string{"http://127.0.0.1:5173", "http://localhost:5173"}
 	corsConfig.AllowCredentials = true
 	srv.Router.Use(cors.New(
 		corsConfig,

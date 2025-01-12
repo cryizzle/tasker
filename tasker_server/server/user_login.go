@@ -2,7 +2,6 @@ package server
 
 import (
 	"database/sql"
-	"log"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -33,8 +32,6 @@ func (srv Server) UserLogin(c *gin.Context) {
 		return
 	}
 
-	log.Println("Error getting user by email: ", err)
-	log.Println("User not found, creating new user")
 	userID, err := srv.DB.CreateUser(ctx, request.Email)
 
 	if err != nil {
@@ -55,5 +52,4 @@ func (srv Server) UserLogin(c *gin.Context) {
 
 func setActiveUserID(c *gin.Context, userID uint64) {
 	c.SetCookie(KEY_USER_ID, strconv.FormatUint(userID, 10), 0, "/", "localhost", false, true)
-	log.Println("Cookie=", c.Request.Cookies())
 }

@@ -5,14 +5,32 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/gofrs/uuid"
 	"github.com/jmoiron/sqlx"
 )
+
+type DatabaseImpl interface {
+	GetMembershipsForUser(ctx context.Context, userID uint64) ([]Member, error)
+	GetTodoListMembers(ctx context.Context, todoListID uint64) ([]Member, error)
+	GetTodoEvents(ctx context.Context, todoID uint64) ([]TodoEvent, error)
+	CreateTodoList(ctx context.Context, name string, token uuid.UUID, user *User) (uint64, error)
+	GetTodoList(ctx context.Context, query *TodoListQueryParam) (*TodoList, error)
+	ListTodoLists(ctx context.Context, userID uint64) ([]TodoList, error)
+	JoinTodoList(ctx context.Context, todoListID uint64, userID uint64) error
+	GetTodos(ctx context.Context, todoListID uint64) ([]Todo, error)
+	GetTodo(ctx context.Context, todoID uint64) (*Todo, error)
+	UpdateTodo(ctx context.Context, todo *Todo, user *User, nextStatus TodoStatus) error
+	CreateTodo(ctx context.Context, todo *Todo) (uint64, error)
+	GetUserByEmail(ctx context.Context, email string) (*User, error)
+	GetUserByID(ctx context.Context, id uint64) (*User, error)
+	CreateUser(ctx context.Context, email string) (uint64, error)
+}
 
 type Database struct {
 	db *sqlx.DB
 }
 
-func NewDatabase(db *sqlx.DB) *Database {
+func NewDatabase(db *sqlx.DB) DatabaseImpl {
 	return &Database{db: db}
 }
 
