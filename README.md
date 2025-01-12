@@ -1,7 +1,5 @@
 # Tasker
 
-Tasker is a collaborative task management application designed to streamline task tracking and team collaboration. This project utilizes a modern tech stack to deliver an efficient and scalable solution.
-
 ## Tech Stack
 
 - **Frontend**: React, TypeScript
