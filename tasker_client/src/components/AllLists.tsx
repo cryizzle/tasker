@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { createTodoListAsync, joinTodoListAsync, loadTodoListsAsync, resetActiveList, selectLists } from '../app/todoListsSlice';
+import { createTodoListAsync, joinTodoListAsync, loadTodoListsAsync, selectLists } from '../app/todoListsSlice';
 import { useNavigate } from 'react-router';
 import { Box, Button, Container, IconButton, ListItem, Paper, TextField, Tooltip } from '@mui/material';
 import { Check, ContentCopy, NoteAdd } from '@mui/icons-material';
@@ -14,7 +14,7 @@ const AllLists: React.FC = () => {
 
   useEffect(() => {
     dispatch(loadTodoListsAsync());
-  }, [dispatch]);
+  }, [loadTodoListsAsync]);
 
   const handleCreateList = async (listName: string) => {
     await dispatch(createTodoListAsync(listName));

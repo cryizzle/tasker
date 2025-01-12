@@ -15,6 +15,7 @@ import { Box, Collapse, Container, IconButton, Paper, TextField } from '@mui/mat
 import moment from 'moment';
 import { Add, Visibility } from '@mui/icons-material';
 import TodoStatusSelect from './common/TodoStatusSelect';
+import TodoListUpdater from './common/TodoListUpdater';
 
 const TodoList: React.FC = () => {
   const { todoListID } = useParams<{ todoListID: string }>();
@@ -27,8 +28,7 @@ const TodoList: React.FC = () => {
     if (todoListID) {
       dispatch(loadActiveListAsync(todoListID));
     }
-  }, [dispatch, todoListID]);
-
+  }, [todoListID]);
 
   const handleAddTodo = async (description: string) => {
     if (activeList) {
@@ -55,40 +55,43 @@ const TodoList: React.FC = () => {
   }
 
   return (
-    <Container
-      maxWidth="lg"
-    >
-      <Typography variant="h4" component="h1" gutterBottom textAlign="center">
-        {activeList.name}
-      </Typography>
-      <Typography variant="body1" gutterBottom textAlign="right">
-        List Owner: {getListOwner()}
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Description</TableCell>
-              <TableCell width="20%">Updated At</TableCell>
-              <TableCell width="20%">Status</TableCell>
-              <TableCell width="10%">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {activeList.todos?.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                handleStatusChange={handleStatusChange}
-                isOpen={openRowTodoID === todo.id}
-                handleRowOpen={() => handleRowClick(todo.id)}
-              />
-            ))}
-            <NewTodoItem onAdd={handleAddTodo} />
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+    <>
+      <Container
+        maxWidth="lg"
+      >
+        <Typography variant="h4" component="h1" gutterBottom textAlign="center">
+          {activeList.name}
+        </Typography>
+        <Typography variant="body1" gutterBottom textAlign="right">
+          List Owner: {getListOwner()}
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Description</TableCell>
+                <TableCell width="20%">Updated At</TableCell>
+                <TableCell width="20%">Status</TableCell>
+                <TableCell width="10%">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {activeList.todos?.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  handleStatusChange={handleStatusChange}
+                  isOpen={openRowTodoID === todo.id}
+                  handleRowOpen={() => handleRowClick(todo.id)}
+                />
+              ))}
+              <NewTodoItem onAdd={handleAddTodo} />
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+      <TodoListUpdater todoListID={todoListID} onUpdate={() => setOpenRowTodoID(null)} />
+    </>
   );
 };
 

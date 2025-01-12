@@ -90,7 +90,6 @@ export const todoListSlice = createAppSlice({
       async (createTodoInput: CreateTodoInput, { dispatch }) => {
         try {
           const createdTodo = await api.createTodo(createTodoInput)
-          dispatch(loadActiveListAsync(createdTodo.todo_list_id))
           dispatch(setSuccess("Successfully created todo"))
           return createdTodo
         } catch (e) {
@@ -103,7 +102,6 @@ export const todoListSlice = createAppSlice({
       async (updateTodoInput: UpdateTodoInput, { dispatch }) => {
         try {
           const updatedTodo = await api.updateTodo(updateTodoInput)
-          dispatch(loadActiveListAsync(updatedTodo.todo_list_id))
           dispatch(setSuccess("Successfully updated todo"))
           return updatedTodo
         } catch (e) {
