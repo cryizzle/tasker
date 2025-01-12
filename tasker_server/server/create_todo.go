@@ -51,5 +51,13 @@ func (srv Server) CreateTodo(c *gin.Context) {
 		c.JSON(500, gin.H{"error": err.Error()})
 	}
 
-	c.JSON(200, gin.H{"todo": database.Todo{ID: todoID}})
+	todo, err := srv.DB.GetTodo(c.Request.Context(), todoID)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Error getting todo"})
+		return
+	}
+
+	srv.SendTodoListUpdate(todo.TodoListID)
+
+	c.JSON(200, gin.H{"todo": todo})
 }
