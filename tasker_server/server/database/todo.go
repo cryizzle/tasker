@@ -58,7 +58,8 @@ func (db Database) GetTodos(ctx context.Context, todoListID uint64) ([]Todo, err
 	users.email as email
 	FROM todos
 	JOIN users ON todos.created_by = users.user_id
-	WHERE todo_list_id = ?`
+	WHERE todo_list_id = ?
+	ORDER BY todos.created_at DESC`
 
 	err := db.db.SelectContext(ctx, &todos, query, todoListID)
 	return todos, err

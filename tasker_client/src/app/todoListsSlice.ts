@@ -43,6 +43,7 @@ export const todoListSlice = createAppSlice({
       async (name: string, { dispatch }) => {
         try {
           const response = await api.createList(name)
+          dispatch(loadTodoListsAsync())
           dispatch(setSuccess("Successfully created todo list"))
           return response
         } catch (e) {
@@ -55,6 +56,7 @@ export const todoListSlice = createAppSlice({
       async (listID: string, { dispatch }) => {
         try {
           const response = await api.joinList(listID)
+          dispatch(loadTodoListsAsync())
           dispatch(setSuccess("Successfully joined todo list"))
           return response
         } catch (e) {
@@ -87,9 +89,10 @@ export const todoListSlice = createAppSlice({
     createTodoAsync: create.asyncThunk(
       async (createTodoInput: CreateTodoInput, { dispatch }) => {
         try {
-          const response = await api.createTodo(createTodoInput)
+          const createdTodo = await api.createTodo(createTodoInput)
+          dispatch(loadActiveListAsync(createdTodo.todo_list_id))
           dispatch(setSuccess("Successfully created todo"))
-          return response
+          return createdTodo
         } catch (e) {
           const message = (e as AxiosError<ErrorResponse>).response?.data.error
           dispatch(setError(message))
@@ -99,9 +102,10 @@ export const todoListSlice = createAppSlice({
     updateTodoAsync: create.asyncThunk(
       async (updateTodoInput: UpdateTodoInput, { dispatch }) => {
         try {
-          const response = await api.updateTodo(updateTodoInput)
+          const updatedTodo = await api.updateTodo(updateTodoInput)
+          dispatch(loadActiveListAsync(updatedTodo.todo_list_id))
           dispatch(setSuccess("Successfully updated todo"))
-          return response
+          return updatedTodo
         } catch (e) {
           const message = (e as AxiosError<ErrorResponse>).response?.data.error
           dispatch(setError(message))

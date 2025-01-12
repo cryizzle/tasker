@@ -73,5 +73,5 @@ func (srv Server) UpdateTodo(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, todo)
+	c.JSON(200, gin.H{"todo": todo})
 }

@@ -12,24 +12,16 @@ const AllLists: React.FC = () => {
   const dispatch = useAppDispatch();
   const todoLists = useAppSelector(selectLists);
 
-  const [shouldRefresh, setShouldRefresh] = useState(true);
-
   useEffect(() => {
-    if (shouldRefresh) {
-      dispatch(resetActiveList());
-      dispatch(loadTodoListsAsync());
-      setShouldRefresh(false);
-    }
-  }, [dispatch, shouldRefresh]);
+    dispatch(loadTodoListsAsync());
+  }, [dispatch]);
 
   const handleCreateList = async (listName: string) => {
     await dispatch(createTodoListAsync(listName));
-    setShouldRefresh(true);
   };
 
   const handleJoinList = async (listToken: string) => {
     await dispatch(joinTodoListAsync(listToken));
-    setShouldRefresh(true);
   };
 
   return (

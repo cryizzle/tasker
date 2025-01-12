@@ -18,31 +18,27 @@ import TodoStatusSelect from './common/TodoStatusSelect';
 
 const TodoList: React.FC = () => {
   const { todoListID } = useParams<{ todoListID: string }>();
-  const [shouldRefresh, setShouldRefresh] = useState(true);
   const [openRowTodoID, setOpenRowTodoID] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
   const activeList = useAppSelector(selectActiveList);
 
   useEffect(() => {
-    if (todoListID && shouldRefresh) {
+    if (todoListID) {
       dispatch(loadActiveListAsync(todoListID));
-      setShouldRefresh(false);
     }
-  }, [dispatch, todoListID, shouldRefresh]);
+  }, [dispatch, todoListID]);
 
 
   const handleAddTodo = async (description: string) => {
     if (activeList) {
       await dispatch(createTodoAsync({ todo_list_id: activeList.id, description }))
-      setShouldRefresh(true);
     }
   };
 
   const handleStatusChange = async (todoID: string, status: TodoStatus) => {
     setOpenRowTodoID(null);
     await dispatch(updateTodoAsync({ todoID, status }));
-    setShouldRefresh(true);
   };
 
   const handleRowClick = async (openRowTodoID: string) => {
