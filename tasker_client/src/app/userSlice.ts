@@ -1,4 +1,4 @@
-import { login } from "./api"
+import api from "./api"
 import { createAppSlice } from "./createAppSlice"
 import { User } from "./types"
 
@@ -16,7 +16,7 @@ export const userSlice = createAppSlice({
   initialState,
   reducers: create => ({
     loginAsync: create.asyncThunk(
-      async (email: string) => await login(email),
+      async (email: string) => await api.login(email),
       {
         fulfilled: (state, action) => {
           state.activeUser = action.payload

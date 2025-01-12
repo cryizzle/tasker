@@ -3,8 +3,9 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { todoListSlice } from "./todoListsSlice"
 import { userSlice } from "./userSlice"
+import { notificationSlice } from "./notificationSlice"
 
-const rootReducer = combineSlices(userSlice, todoListSlice)
+const rootReducer = combineSlices(userSlice, todoListSlice, notificationSlice)
 export type RootState = ReturnType<typeof rootReducer>
 
 export const makeStore = (preloadedState?: Partial<RootState>) => {

@@ -1,5 +1,7 @@
-import { createList, createTodo, CreateTodoInput, fetchList, fetchLists, fetchTodoEvents, joinList, updateTodo, UpdateTodoInput } from "./api"
+import { AxiosError } from "axios"
+import api, { CreateTodoInput, ErrorResponse, UpdateTodoInput } from "./api"
 import { createAppSlice } from "./createAppSlice"
+import { setError, setSuccess } from "./notificationSlice"
 import { TodoEvent, TodoList } from "./types"
 
 export interface TodoListState {
@@ -20,85 +22,111 @@ export const todoListSlice = createAppSlice({
   initialState,
   reducers: create => ({
     loadTodoListsAsync: create.asyncThunk(
-      async () => await fetchLists(),
+      async (_, { dispatch }) => {
+        try {
+          return await api.fetchLists()
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
+      },
       {
         fulfilled: (state, action) => {
           state.lists = action.payload
         },
-        rejected: state => {
+        rejected: (state) => {
           state.lists = []
         },
       },
     ),
     createTodoListAsync: create.asyncThunk(
-      async (name: string) => await createList(name),
-      {
-        fulfilled: (state, action) => {
-          // state.lists = [action.payload, ...state.lists]
-        },
-      },
+      async (name: string, { dispatch }) => {
+        try {
+          const response = await api.createList(name)
+          dispatch(setSuccess("Successfully created todo list"))
+          return response
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
+      }
     ),
     joinTodoListAsync: create.asyncThunk(
-      async (listID: string) => await joinList(listID),
-      {
-        fulfilled: (state, action) => {
-          // state.lists = [action.payload, ...state.lists]
-        },
+      async (listID: string, { dispatch }) => {
+        try {
+          const response = await api.joinList(listID)
+          dispatch(setSuccess("Successfully joined todo list"))
+          return response
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
       },
     ),
     resetTodoLists: create.reducer((state) => {
       state.lists = []
     }),
     loadActiveListAsync: create.asyncThunk(
-      async (listID: string) => await fetchList(listID),
+      async (listID: string, { dispatch }) => {
+        try {
+          return await api.fetchList(listID)
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
+      },
       {
         fulfilled: (state, action) => {
           state.activeList = action.payload
         },
-        rejected: state => {
+        rejected: (state) => {
           state.activeList = null
         },
       },
     ),
     createTodoAsync: create.asyncThunk(
-      async (createTodoInput: CreateTodoInput) => await createTodo(createTodoInput),
-      {
-        fulfilled: (state, action) => {
-          // state.activeTodo = action.payload
-        },
-        rejected: state => {
-          // state.activeTodo = null
-        },
+      async (createTodoInput: CreateTodoInput, { dispatch }) => {
+        try {
+          const response = await api.createTodo(createTodoInput)
+          dispatch(setSuccess("Successfully created todo"))
+          return response
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
       },
     ),
     updateTodoAsync: create.asyncThunk(
-      async (updateTodoInput: UpdateTodoInput) => await updateTodo(updateTodoInput),
-      {
-        fulfilled: (state, action) => {
-          // state.activeTodo = action.payload
-        },
-        rejected: state => {
-          // state.activeTodo = null
-        },
+      async (updateTodoInput: UpdateTodoInput, { dispatch }) => {
+        try {
+          const response = await api.updateTodo(updateTodoInput)
+          dispatch(setSuccess("Successfully updated todo"))
+          return response
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
       },
     ),
     resetActiveList: create.reducer((state) => {
       state.activeList = null
     }),
     loadActiveTodoEventsAsync: create.asyncThunk(
-      async (todoID: string) => await fetchTodoEvents(todoID),
+      async (todoID: string, { dispatch }) => {
+        try {
+          return await api.fetchTodoEvents(todoID)
+        } catch (e) {
+          const message = (e as AxiosError<ErrorResponse>).response?.data.error
+          dispatch(setError(message))
+        }
+      },
       {
         fulfilled: (state, action) => {
           state.activeTodoEvents = action.payload
         },
-        rejected: state => {
-          // state.activeTodo = null
-        },
       },
     ),
-
   }),
-
   selectors: {
     selectLists: todoListState => todoListState.lists,
     selectActiveList: todoListState => todoListState.activeList,

@@ -11,6 +11,7 @@ import '@fontsource/roboto/700.css';
 import AppRouter from "./AppRouter";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material"
 import theme from "./theme"
+import Notification from "./components/common/Notification"
 
 
 // const { VITE_APP_SERVER_URL } = import.meta.env;
@@ -37,6 +38,7 @@ root.render(
           }}
         />
         <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+          <Notification />
           <AppRouter />
         </div>
       </ThemeProvider>

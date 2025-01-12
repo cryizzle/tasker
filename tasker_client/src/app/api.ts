@@ -1,69 +1,50 @@
 import axios from "axios"
 
-export const login = async (email: string) => {
-  try {
-    return await axios.post("/user/login", { email }).then((response) => response.data.user)
-  } catch (e) {
-    return null
-  }
+export type ErrorResponse = { error: string }
+
+const login = async (email: string) => {
+  return await axios.post("/user/login", { email }).then((response) => response.data.user)
 }
 
-export const createList = async (name: string) => {
-  try {
-    return await axios.post("/list/create", { name }).then((response) => response.data.todo_list)
-  } catch (e) {
-    return null
-  }
+const createList = async (name: string) => {
+  return await axios.post("/list/create", { name }).then((response) => response.data.todo_list)
 }
 
-export const joinList = async (listID: string) => {
-  try {
-    return await axios.post(`/list/join/${listID}`).then((response) => response.data.todo_list)
-  } catch (e) {
-    return null
-  }
+const joinList = async (listID: string) => {
+  return await axios.post(`/list/join/${listID}`).then((response) => response.data.todo_list)
 }
 
-export const fetchLists = async () => {
-  try {
-    return await axios.get("/list/all").then((response) => response.data.todo_lists)
-  } catch (e) {
-    return []
-  }
+const fetchLists = async () => {
+  return await axios.get("/list/all").then((response) => response.data.todo_lists)
 }
 
-export const fetchList = async (listID: string) => {
-  try {
-    return await axios.get(`/list/${listID}`).then((response) => response.data.todo_list)
-  } catch (e) {
-    return null
-  }
+const fetchList = async (listID: string) => {
+  return await axios.get(`/list/${listID}`).then((response) => response.data.todo_list)
 }
 
 export type CreateTodoInput = { todo_list_id: string, description: string }
-export const createTodo = async (input: CreateTodoInput) => {
-  try {
-    return await axios.post("/todo/create", input).then((response) => response.data.todo)
-  } catch (e) {
-    return null
-  }
+const createTodo = async (input: CreateTodoInput) => {
+  return await axios.post("/todo/create", input).then((response) => response.data.todo)
 }
 
 export type UpdateTodoInput = { todoID: string, status: string }
-export const updateTodo = async ({ todoID, status }: UpdateTodoInput) => {
-  try {
-    return await axios.post(`/todo/update/${todoID}`, { status }).then((response) => response.data.todo)
-  } catch (e) {
-    return null
-  }
+const updateTodo = async ({ todoID, status }: UpdateTodoInput) => {
+  return await axios.post(`/todo/update/${todoID}`, { status }).then((response) => response.data.todo)
 }
 
-export const fetchTodoEvents = async (todoID: string) => {
-  try {
-    return await axios.get(`/todo/events/${todoID}`).then((response) => response.data.todo_events)
-  } catch (e) {
-    return []
-  }
+const fetchTodoEvents = async (todoID: string) => {
+  return await axios.get(`/todo/events/${todoID}`).then((response) => response.data.todo_events)
+}
+
+export default {
+  login,
+  createList,
+  joinList,
+  fetchLists,
+  fetchList,
+  createTodo,
+  updateTodo,
+  fetchTodoEvents,
 }
 
 
