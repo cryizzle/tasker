@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router"
+import { HashRouter, Route, Routes } from "react-router"
 import { ROUTES } from "./resources/route-constants"
 import HomePage from "./pages/HomePage"
 import { useAppSelector } from "./app/hooks"
@@ -10,14 +10,14 @@ const AppRouter = () => {
 
   const activeUser = useAppSelector(selectActiveUser)
   return (
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route index element={activeUser == null ? <LoginPage /> : <HomePage/>} />
           <Route path={ROUTES.HOME_ROUTE} element={<HomePage />} />
           <Route path={ROUTES.LOGIN_ROUTE} element={<LoginPage />} />
           <Route path={ROUTES.TODO_LIST_ROUTE} element={<TodoListPage />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
   )
 }
 

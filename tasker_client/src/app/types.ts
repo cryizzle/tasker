@@ -30,7 +30,7 @@ export type Todo = {
   status: TodoStatus
   created_at: string
   updated_at: string
-  created_by: User
+  created_by: string
   email: string
 }
 
