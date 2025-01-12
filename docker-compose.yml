@@ -39,17 +39,3 @@ services:
       <<: *common-variables
       PORT: :8000
       DB_DRIVER: mysql
-  # tasker_client:
-  #   build: ./tasker_client
-  #   environment:
-  #     NODE_PATH: src
-  #     VITE_APP_SERVER_URL: http://localhost:8000
-  #   expose:
-  #     - 5173
-  #   ports:
-  #     - 5173:5173
-  #   volumes:
-  #     - ./client/src:/app/src
-  #   # links:
-  #   #   - tasker_server
-  #   command: npm start

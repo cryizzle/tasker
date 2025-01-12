@@ -1,4 +1,4 @@
-.PHONY: server_start server_log server_restart db_connect client_start client_build
+.PHONY: server_start server_log server_restart server_test db_connect client_start client_build
 
 server_start:
 	docker compose build && docker compose up -d
@@ -14,8 +14,6 @@ server_test:
 
 db_connect:
 	mysql -h localhost -P 3306 --protocol=tcp -u root -p
-
-.PHONY: server_start server_log server_restart db_connect
 
 client_start:
 	cd tasker_client &&	npm start

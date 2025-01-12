@@ -33,7 +33,7 @@ const AllLists: React.FC = () => {
         <h2>My Lists</h2>
       </Box>
       <List component={Box} bgcolor={'transparent'}>
-        {todoLists.map((list) => (
+        {todoLists?.map((list) => (
           <SingleList list={list} key={list.id} />
         ))}
         <NewList handleCreateList={handleCreateList} />
