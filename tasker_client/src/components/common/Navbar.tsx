@@ -1,12 +1,13 @@
-import { AppBar, Button, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material"
 import { useNavigate } from "react-router"
-import { logout } from "../../app/userSlice";
-import { useAppDispatch } from "../../app/hooks";
+import { logout, selectActiveUser } from "../../app/userSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 const Navbar: React.FC = () => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectActiveUser);
   const handleLogout = () => {
     dispatch(logout())
     navigate("/")
@@ -14,12 +15,17 @@ const Navbar: React.FC = () => {
 
   return <AppBar position="static">
     <Toolbar>
-      <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+      <Typography variant="h4" sx={{ flexGrow: 1 }}>
         Tasker
       </Typography>
-      <Button color="inherit" onClick={handleLogout} size='medium'>
-        Logout
-      </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="body1" sx={{ mr: 2}}>
+          <strong>{user?.email}</strong>
+        </Typography>
+        <Button color="inherit" onClick={handleLogout} size='medium'>
+          Logout
+        </Button>
+      </Box>
     </Toolbar>
   </AppBar>
 }
