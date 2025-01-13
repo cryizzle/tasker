@@ -34,6 +34,7 @@ type Server struct {
 	Router *gin.Engine
 	DB     database.DatabaseImpl
 	Event  *Event
+
 }
 
 func NewEvent() (event *Event) {
@@ -55,11 +56,10 @@ func CreateServer(db *sqlx.DB) *Server {
 	return server
 }
 
-func (srv *Server) Routes() {
+func (srv *Server) Routes(allowedOrigins []string) {
 
 	corsConfig := cors.DefaultConfig()
-	// TODO: move to env
-	corsConfig.AllowOrigins = []string{"http://127.0.0.1:5173", "http://localhost:5173"}
+	corsConfig.AllowOrigins = allowedOrigins
 	corsConfig.AllowCredentials = true
 	srv.Router.Use(cors.New(
 		corsConfig,

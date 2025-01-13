@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/cryizzle/tasker/tasker_server/server"
 	_ "github.com/go-sql-driver/mysql"
@@ -50,8 +51,9 @@ func main() {
 		log.Fatalln("Couldn't connect to DB")
 	}
 
+	allowedOrigins := strings.Split(os.Getenv("ALLOWED_ORIGIN"), ",")
 	srv := server.CreateServer(db)
-	srv.Routes()
+	srv.Routes(allowedOrigins)
 	log.Println("server running on port:8000")
 	srv.Start(PORT)
 }
