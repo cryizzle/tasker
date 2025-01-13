@@ -89,3 +89,27 @@ To build the frontend application:
 make client_build
 ```
 Executables are built in the `tasker_client/out` for MACOS and Windows
+
+## Prioritised Featureset
+
+### 1. Memberships
+
+Introducing user roles such as OWNER and MEMBER allows for more flexible permission management within a Todo List. This feature sets the foundation for implementing finer-grain access controls in the future, such as adding VIEWER roles who can only view tasks without editing capabilities.
+
+### 2. Todo History
+
+Given the collaborative nature of Tasker, tracking changes made to Todo Lists ensures accountability and clarity. By logging who made changes and when, teams can better manage task responsibilities and resolve conflicts.
+
+### 3. SSE Updates for Todo List
+
+Server-Sent Events (SSE) provide real-time updates to users, enabling seamless collaboration without the need for frequent polling or manual page refreshes. This improves user experience by maintaining up-to-date task views effortlessly.
+
+## Deprioritised Featureset
+
+### 1. Pagination
+
+While pagination can improve performance when handling a large number of tasks, the initial development focuses on collaboration and task management features. Pagination will be prioritized later as the application scales.
+
+### 2. User Authentication
+
+A simple layer to identify which user is associated with each action has been implemented. However, more comprehensive user authentication mechanisms have been deprioritized to focus on the collaborative aspects of the application first. Expanding authentication features will be addressed in future iterations.
