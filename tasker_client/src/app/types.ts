@@ -41,7 +41,7 @@ export enum TodoEventType {
 
 export type TodoEvent = {
   id: string
-  todoID: string
+  todo_id: string
   old_value: string
   new_value: string
   created_at: string
@@ -50,7 +50,7 @@ export type TodoEvent = {
 }
 
 export type User = {
-  id: string
+  user_id: string
   email: string
 }
 
