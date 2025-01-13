@@ -46,6 +46,12 @@ const TodoList: React.FC = () => {
     setOpenRowTodoID(prevOpenRowId => (prevOpenRowId === openRowTodoID ? null : openRowTodoID));
   };
 
+  const handleIncomingUpdate = async () => {
+    if (openRowTodoID != null) {
+      await dispatch(loadActiveTodoEventsAsync(openRowTodoID));
+    }
+  }
+
   const getListOwner = () => {
     return activeList?.members.find((member) => member.type === "OWNER")?.email;
   }
@@ -89,7 +95,7 @@ const TodoList: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TodoListUpdater todoListID={todoListID} onUpdate={() => setOpenRowTodoID(null)} />
+        <TodoListUpdater todoListID={todoListID} onUpdate={handleIncomingUpdate} />
       </Container>
     </>
   );
