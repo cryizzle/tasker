@@ -19,5 +19,6 @@ client_start:
 	cd tasker_client &&	npm start
 
 client_build:
-	cd tasker_client &&	npm run make
+	cd tasker_client &&	npm run package
+
 
