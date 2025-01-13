@@ -89,8 +89,8 @@ const TodoList: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <TodoListUpdater todoListID={todoListID} onUpdate={() => setOpenRowTodoID(null)} />
       </Container>
-      <TodoListUpdater todoListID={todoListID} onUpdate={() => setOpenRowTodoID(null)} />
     </>
   );
 };

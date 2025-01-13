@@ -19,7 +19,7 @@ const Notification: React.FC = () => {
       onClose={handleClose}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >
-      <Alert onClose={handleClose} severity={notification?.severity ?? "info"}>
+      <Alert onClose={handleClose} severity={notification?.severity}>
         {notification?.message ?? ""}
       </Alert>
     </Snackbar>

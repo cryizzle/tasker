@@ -2,7 +2,6 @@ import React from "react"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { store } from "./app/store"
-import axios from "axios"
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -13,15 +12,7 @@ import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material"
 import theme from "./theme"
 import Notification from "./components/common/Notification"
 
-
-// const { VITE_APP_SERVER_URL } = import.meta.env;
-
 const root = createRoot(document.body);
-
-axios.defaults.baseURL = 'http://localhost:8000'
-axios.defaults.withCredentials = true
-// console.log('VITE_APP_SERVER_URL', VITE_APP_SERVER_URL)
-// console.log('process.env', import.meta.)
 
 root.render(
   <React.StrictMode>
